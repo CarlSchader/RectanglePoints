@@ -17,13 +17,13 @@ struct Point
 
 #pragma pack(pop)
 
-void pointMergeSort(struct Point* points, int size, bool (*pointLessThanOp)(struct Point*, struct Point*));
+void pointMergeSort(struct Point** points, int size, bool (*pointLessThanOp)(struct Point*, struct Point*));
 
-void pointMerge(struct Point* points, int left, int middle, int right, bool (*pointLessThanOp)(struct Point*, struct Point*));
+void pointMerge(struct Point** points, int left, int middle, int right, bool (*pointLessThanOp)(struct Point*, struct Point*));
 
-int pointClosestGreaterIndex(struct Point* points, float searchValue, int size, bool (*componentLessThanValue)(struct Point*, float));
+int pointClosestGreaterIndex(struct Point** points, float searchValue, int size, bool (*componentLessThanValue)(struct Point*, float));
 
-int pointClosestLesserIndex(struct Point* points, float searchValue, int size, bool (*valueLessThanComponent)(float, struct Point*));
+int pointClosestLesserIndex(struct Point** points, float searchValue, int size, bool (*valueLessThanComponent)(float, struct Point*));
 
 bool pointLessThanX(struct Point* p1, struct Point* p2);
 

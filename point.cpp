@@ -1,14 +1,13 @@
 #include "point.h"
-#include <algorithm>
+#include <algorithm> 
 
 using namespace std;
 
-void pointMergeSort(struct Point* points, int size, bool (*pointLessThanOp)(struct Point*, struct Point*)) {
-    int arraySize, left, middle, right;
-    arraySize = 1;
-    left = 0;
-    middle = 0;
-    right = 1;
+void pointMergeSort(struct Point** points, int size, bool (*pointLessThanOp)(struct Point*, struct Point*)) {
+    int arraySize = 1;
+    int left = 0;
+    int middle = 0;
+    int right = 1;
     while (arraySize < size) {
         if (right == size - 1) {
             arraySize = arraySize * 2;
@@ -25,12 +24,12 @@ void pointMergeSort(struct Point* points, int size, bool (*pointLessThanOp)(stru
 }
 
 // middle is the index of the last element of the left array.
-void pointMerge(struct Point* points, int left, int middle, int right, bool (*pointLessThanOp)(struct Point*, struct Point*)) {
+void pointMerge(struct Point** points, int left, int middle, int right, bool (*pointLessThanOp)(struct Point*, struct Point*)) {
     int leftSize = middle - left + 1;
     int rightSize = right - middle;
 
-    Point* leftArray = new struct Point[leftSize];
-    Point* rightArray = new struct Point[rightSize];
+    Point** leftArray = new struct Point*[leftSize];
+    Point** rightArray = new struct Point*[rightSize];
 
     for (int i = 0; i < leftSize; i++) {
         leftArray[i] = points[left + i];
@@ -44,7 +43,7 @@ void pointMerge(struct Point* points, int left, int middle, int right, bool (*po
     int j = 0;
     int index = left;
     while (i < leftSize && j < rightSize) {
-        if (pointLessThanOp(&rightArray[j], &leftArray[i])) {
+        if (pointLessThanOp(rightArray[j], leftArray[i])) {
             points[index] = rightArray[j];
             j++;
         }
@@ -73,21 +72,21 @@ void pointMerge(struct Point* points, int left, int middle, int right, bool (*po
 /* Returns the index of the point closest to the searchValue comparing the searchValue using pointLessThanOp.
 If the value is larger than all the points it returns -1.
 Complexity: O(logn) */
-int pointClosestGreaterIndex(struct Point* points, float searchValue, int size, bool (*componentLessThanValue)(struct Point*, float)) {
-    int min, max, index;
-    min = 0;
-    max = size - 1;
+int pointClosestGreaterIndex(struct Point** points, float searchValue, int size, bool (*componentLessThanValue)(struct Point*, float)) {
+    int min = 0;
+    int max = size - 1;
+    int index = -1;
 
     while (min <= max) {
         index = (min + max) / 2;
-        if (componentLessThanValue(&points[index], searchValue)) {
+        if (componentLessThanValue(points[index], searchValue)) {
             min = index + 1;
         }
         else {
             max = index - 1;
         }
     }
-    if (componentLessThanValue(&points[index], searchValue)) {
+    if (componentLessThanValue(points[index], searchValue)) {
         index++;
     }
 
@@ -102,21 +101,21 @@ int pointClosestGreaterIndex(struct Point* points, float searchValue, int size, 
 /* Returns the index of the point closest to the searchValue comparing the searchValue using pointLessThanOp.
 If the value is smaller than all the points it returns -1.
 Complexity: O(logn) */
-int pointClosestLesserIndex(struct Point* points, float searchValue, int size, bool (*valueLessThanComponent)(float, struct Point*)) {
-    int min, max, index;
-    min = 0;
-    max = size - 1;
+int pointClosestLesserIndex(struct Point** points, float searchValue, int size, bool (*valueLessThanComponent)(float, struct Point*)) {
+    int min = 0;
+    int max = size - 1;
+    int index = -1;
 
     while (min <= max) {
         index = (min + max) / 2;
-        if (valueLessThanComponent(searchValue, &points[index])) {
+        if (valueLessThanComponent(searchValue, points[index])) {
             max = index - 1;
         }
         else {
             min = index + 1;
         }
     }
-    if (valueLessThanComponent(searchValue, &points[index])) {
+    if (valueLessThanComponent(searchValue, points[index])) {
         index--;
     }
 

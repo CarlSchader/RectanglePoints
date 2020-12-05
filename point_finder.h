@@ -9,14 +9,13 @@ class PointFinder {
     public:
         PointFinder(int size);
         ~PointFinder();
-        void insert(struct Point, int index);
-        struct Point getPoint(int index);
-        struct Point* searchRect();
+        void insert(struct Point*, int index);
+        struct Point* getPoint(int index);
         void xSort();
-        int32_t rectSearch(struct Rect rect, int32_t count, struct Point* rankedPoints);
+        int32_t rectSearch(struct Rect* rect, int32_t count, struct Point* rankedPoints);
 
     private:
-        struct Point* _points;
+        struct Point** _points;
         int _size;
 };
 
