@@ -52,4 +52,5 @@ typedef int32_t (__stdcall* T_search)(struct SearchContext* sc, const Rect rect,
 /* Release the resources associated with the context. Return nullptr if successful, "sc" otherwise. */
 
 typedef struct SearchContext* (__stdcall* T_destroy)(struct SearchContext* sc);
+
 #endif

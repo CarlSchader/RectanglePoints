@@ -1,8 +1,13 @@
 #include "point_finder.h"
-#include "point_search.h"
+#include "point.h"
+#include "rect.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <time.h>
+#include <algorithm>
+
+using namespace std;
 
 PointFinder::PointFinder(int size) {
     this->_size = size;
@@ -11,7 +16,6 @@ PointFinder::PointFinder(int size) {
 
 PointFinder::~PointFinder() {
     delete[] this->_points;
-    // delete[] this->_rectanglePoints;
 }
 
 void PointFinder::insert(struct Point point, int index) {
@@ -26,45 +30,53 @@ struct Point* PointFinder::searchRect() {
     return this->_points;
 }
 
-void PointFinder::_pointMergeSort(struct Point* points, int size, bool (*pointLessThanOp)(struct Point p1, struct Point p2)) {
-    int left, middle, right;
-    Point buffer;
-    left = 0;
-    middle = 1;
-    right = 1;
-
-    do {
-        this->_pointMerge(p)
-    }
-    while()
+void PointFinder::xSort() {
+    pointMergeSort(this->_points, this->_size, pointLessThanX);
 }
 
-// middle is the index of the last element of the left array.
-void PointFinder::_pointMerge(struct Point* points, int left, int middle, int right, bool (*pointLessThanOp)(struct Point p1, struct Point p2)) {
-    Point leftArray[middle - left + 1];
-    Point rightArray[right - middle];
+int32_t PointFinder::rectSearch(struct Rect rect, int32_t count, struct Point* rankedPoints) {
+    int left, right, newSize;
 
-    for (int i = left; i < middle - left + 1; i++) {
-        leftArray[i] = points[i];
+    left = pointClosestGreaterIndex(this->_points, rect.lx, this->_size, xComponentLessThanValue);
+    right = pointClosestLesserIndex(this->_points, rect.hx, this->_size, valueLessThanComponentX);
+    if (left == -1 || right == -1 || right < left) {
+        return 0;
+    }
+    newSize = right - left + 1;
+    
+    struct Point* validPointsX = new struct Point[newSize];
+    for (int i = 0; i < newSize; i++) {
+        validPointsX[i] = this->_points[left + i];
     }
 
-    for (int i = middle + 1; i < right - middle; i++) {
-        rightArray[i] = points[i];
+    // Sort all points whose x values are in [lx, hx] by their y coordinate. O(nlogn) (this list is usually significantly smaller)
+    pointMergeSort(validPointsX, newSize, pointLessThanY);
+
+    left = pointClosestGreaterIndex(validPointsX, rect.ly, newSize, yComponentLessThanValue);
+    right = pointClosestLesserIndex(validPointsX, rect.hy, newSize, valueLessThanComponentY);
+    if (left == -1 || right == -1 || right < left) {
+        return 0;
+    }
+    newSize = right - left + 1;
+
+    validPointsX;
+    struct Point* validPointsY = new struct Point[newSize];
+    for (int i = 0; i < newSize; i++) {
+        validPointsY[i] = validPointsX[left + i];
     }
 
-    int i, j = left, middle + 1;
-    while (i < middle + 1 && j < right + 1) {
-        
+    // Sort all points in the rect by rank
+    pointMergeSort(validPointsY, newSize, pointLessThanRank);
+
+    newSize= min(count, newSize);
+    for (int i = 0; i < newSize; i++) {
+        rankedPoints[i] = validPointsY[i];
     }
 
-}
+    delete[] validPointsX;
+    delete[] validPointsY;
 
-bool PointFinder::_xLessThan(struct Point p1, struct Point p2) {
-    return p1.x < p2.x;
-}
-
-bool PointFinder::_yLessThan(struct Point p1, struct Point p2) {
-    return p1.y < p2.y;
+    return newSize;
 }
 
 /* Testing code
@@ -80,8 +92,21 @@ struct Point randomPoint(int8_t id) {
     return point;
 }
 
+struct Rect randomRect() {
+    struct Rect rect;
+    rect.lx = (float)(rand() / RAND_MAX) + (float)((rand() % 20000) - 10000);
+    rect.hx = min((int)rect.lx + (rand() % 500), 10000);
+    rect.ly = (float)(rand() / RAND_MAX) + (float)((rand() % 20000) - 10000);
+    rect.hy = min((int)rect.ly + (rand() % 500), 10000);
+    return rect;
+}
+
 void printPoint(struct Point point) {
     printf("id: %d, rank: %d, x: %f y: %f\n", point.id, point.rank, point.x, point.y);
+}
+
+void printRect(struct Rect rect) {
+    printf("x: [%f, %f] y: [%f, %f]\n", rect.lx, rect.hx, rect.ly, rect.hy);
 }
 
 int main(int argc, char *argv[]) {
@@ -93,15 +118,53 @@ int main(int argc, char *argv[]) {
     const int RANKED_COUNT = atoi(argv[2]);
     const int RECTANGLE_COUNT = atoi(argv[3]);
 
+    srand(time(NULL));
+
     PointFinder pf = PointFinder(POINT_COUNT); 
+
+    time_t start = time(NULL);
+    printf("\nLoading points.\n");
+
     for (int i = 0; i < POINT_COUNT; i++) {
         struct Point point = randomPoint(i);
         pf.insert(point, i);
     }
+    printf("Loading time: %ld\n", time(NULL) - start);
 
-    for (int i = 0; i < POINT_COUNT; i++) {
-        printPoint(pf.getPoint(i));
+    printf("\nCreating rects.\n");
+    struct Rect* rects = new struct Rect[RECTANGLE_COUNT];
+    for (int i = 0; i < RECTANGLE_COUNT; i++) {
+        rects[i] = randomRect();
     }
-    
+
+    // printf("\nLoaded points:\n");
+
+    // for (int i = 0; i < POINT_COUNT; i++) {
+    //     printPoint(pf.getPoint(i));
+    // }
+
+    start = time(NULL);
+    pf.xSort();
+    printf("\nSorted points:\n");
+    printf("Sorting time: %ld\n", time(NULL) - start);
+    // for (int i = 0; i < POINT_COUNT; i++) {
+    //     printPoint(pf.getPoint(i));
+    // }
+
+
+    start = time(NULL);
+    struct Point rankedPoints[RANKED_COUNT];
+    for (int i = 0; i < RECTANGLE_COUNT; i++) {
+        int pointNumber = pf.rectSearch(rects[i], RANKED_COUNT, rankedPoints);
+        // printf("\n\n%d points found inside rect:\n", pointNumber);
+        // printRect(rects[i]);
+        // for (int j = 0; j < pointNumber; j++) {
+        //     printPoint(rankedPoints[j]);
+        // }
+    }
+    printf("rect searching time: %ld\n", time(NULL) - start);
+
+    delete[] rects;
+
     return 0;
 }
