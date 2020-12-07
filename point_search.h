@@ -18,7 +18,7 @@ This is how I developed because I temporarilty have a slow windows machine :-\ *
 #endif
 
 /* Compiling on Visual C++ on windows 64 bit */
-#ifdef __WIN64
+#ifdef __WIN32
 
 #ifdef POINT_SEARCH_EXPORTS
 #define POINT_SEARCH_API __declspec(dllexport)
