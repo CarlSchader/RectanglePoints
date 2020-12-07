@@ -8,49 +8,41 @@ dynamically. The DLL should export the following functions: "create", "search" a
 descriptions of these functions are given below. You can use any language or compiler, as long as the resulting DLL
 implements this interface. */
 
+/* Any unix operating systems such as linux get compiled with these directives. Compiler g++ (Doesn't build a dll)
+This is how I developed because I temporarilty have a slow windows machine :-\ */
+#ifdef __unix__
+
+#define __stdcall
+#define EXPORT
+
+#endif
+
+/* Compiling on Visual C++ on windows 64 bit */
+#ifdef __WIN64
+
+#ifdef POINT_SEARCH_EXPORTS
+#define POINT_SEARCH_API __declspec(dllexport)
+#else
+#define POINT_SEARCH_API __declspec(import)
+#endif
+
+#define EXPORT extern "C"
+
+#endif
+
 /* This standard header defines the sized types used. */
 #include <stdint.h>
-
-/* The following structs are packed with no padding. */
-#pragma pack(push, 1)
-
-/* Defines a point in 2D space with some additional attributes like id and rank. */
-struct Point
-{
-	int8_t id;
-	int32_t rank;
-	float x;
-	float y;
-};
-
-/* Defines a rectangle, where a point (x,y) is inside, if x is in [lx, hx] and y is in [ly, hy]. */
-struct Rect
-{
-	float lx;
-	float ly;
-	float hx;
-	float hy;
-};
-#pragma pack(pop)
+#include "point_finder.h"
 
 /* Declaration of the struct that is used as the context for the calls. */
-struct SearchContext;
+struct SearchContext {
+	struct PointFinder* pf;
+};
 
-/* Load the provided points into an internal data structure. The pointers follow the STL iterator convention, where
-"points_begin" points to the first element, and "points_end" points to one past the last element. The input points are
-only guaranteed to be valid for the duration of the call. Return a pointer to the context that can be used for
-consecutive searches on the data. */
+EXPORT struct SearchContext* __stdcall create(const Point* points_begin, const Point* points_end);
 
-typedef struct SearchContext* (__stdcall* T_create)(const Point* points_begin, const Point* points_end);
+EXPORT int32_t __stdcall search(struct SearchContext* sc, const Rect rect, const int32_t count, Point* out_points);
 
-/* Search for "count" points with the smallest ranks inside "rect" and copy them ordered by smallest rank first in
-"out_points". Return the number of points copied. "out_points" points to a buffer owned by the caller that
-can hold "count" number of Points. */
-
-typedef int32_t (__stdcall* T_search)(struct SearchContext* sc, const Rect rect, const int32_t count, Point* out_points);
-
-/* Release the resources associated with the context. Return nullptr if successful, "sc" otherwise. */
-
-typedef struct SearchContext* (__stdcall* T_destroy)(struct SearchContext* sc);
+EXPORT struct SearchContext* __stdcall destroy(struct SearchContext* sc);
 
 #endif

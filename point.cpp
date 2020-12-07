@@ -1,3 +1,8 @@
+/* For compiling a dll on Visual C++ */
+#ifdef __WIN64 
+#include "pch.h"
+#endif
+
 #include "point.h"
 #include <algorithm> 
 
