@@ -73,54 +73,56 @@ int main(int argc, char *argv[]) {
     delete[] out_points;
     delete[] rects;
 
+    printf("%d Testing destroy\n", 2);
+    destroy(sc);
 
     //
+    printf("%d Testing algorithm and datastructure\n", 3);
+    PointFinder* pf = new PointFinder(POINT_COUNT); 
 
-    // PointFinder* pf = new PointFinder(POINT_COUNT); 
+    time_t start = time(NULL);
+    printf("\nLoading points.\n");
 
-    // time_t start = time(NULL);
-    // printf("\nLoading points.\n");
+    for (int i = 0; i < POINT_COUNT; i++) {
+        struct Point* point = randomPoint(i);
+        pf->insert(point, i);
+    }
+    printf("Loading time: %ld\n", time(NULL) - start);
+
+
+    struct Rect** moreRects = new struct Rect*[RECTANGLE_COUNT];
+    for (int i = 0; i < RECTANGLE_COUNT; i++) {
+        moreRects[i] = randomRect();
+    }
+
+    // printf("\nLoaded points:\n");
 
     // for (int i = 0; i < POINT_COUNT; i++) {
-    //     struct Point* point = randomPoint(i);
-    //     pf->insert(point, i);
-    // }
-    // printf("Loading time: %ld\n", time(NULL) - start);
-
-    // printf("\nCreating rects.\n");
-    // struct Rect** rects = new struct Rect*[RECTANGLE_COUNT];
-    // for (int i = 0; i < RECTANGLE_COUNT; i++) {
-    //     rects[i] = randomRect();
+    //     printPoint(pf->getPoint(i));
     // }
 
-    // // printf("\nLoaded points:\n");
-
-    // // for (int i = 0; i < POINT_COUNT; i++) {
-    // //     printPoint(pf->getPoint(i));
-    // // }
-
-    // start = time(NULL);
-    // pf->xSort();
-    // printf("\nSorted points:\n");
-    // printf("Sorting time: %ld\n", time(NULL) - start);
-    // // for (int i = 0; i < POINT_COUNT; i++) {
-    // //     printPoint(pf->getPoint(i));
-    // // }
-
-
-    // start = time(NULL);
-    // struct Point rankedPoints[RANKED_COUNT];
-    // for (int i = 0; i < RECTANGLE_COUNT; i++) {
-    //     int pointNumber = pf->rectSearch(rects[i], RANKED_COUNT, rankedPoints);
-    //     // printf("\n\n%d points found inside rect:\n", pointNumber);
-    //     // printRect(rects[i]);
-    //     // for (int j = 0; j < pointNumber; j++) {
-    //     //     printPoint(&rankedPoints[j]);
-    //     // }
+    start = time(NULL);
+    pf->xSort();
+    printf("\nSorted points:\n");
+    printf("Initial sorting time: %ld\n", time(NULL) - start);
+    // for (int i = 0; i < POINT_COUNT; i++) {
+    //     printPoint(pf->getPoint(i));
     // }
-    // printf("rect searching time: %ld\n", time(NULL) - start);
 
-    // delete[] rects;
+
+    start = time(NULL);
+    struct Point rankedPoints[RANKED_COUNT];
+    for (int i = 0; i < RECTANGLE_COUNT; i++) {
+        int pointNumber = pf->rectSearch(moreRects[i], RANKED_COUNT, rankedPoints);
+        // printf("\n\n%d points found inside rect:\n", pointNumber);
+        // printRect(rects[i]);
+        // for (int j = 0; j < pointNumber; j++) {
+        //     printPoint(&rankedPoints[j]);
+        // }
+    }
+    printf("rect searching time: %ld\n", time(NULL) - start);
+
+    delete[] rects;
 
     return 0;
 }
