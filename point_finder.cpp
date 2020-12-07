@@ -11,18 +11,18 @@ using namespace std;
 
 PointFinder::PointFinder(int size) {
     this->_size = size;
-    this->_points = new struct Point*[size];
+    this->_points = new const struct Point*[size];
 }
 
 PointFinder::~PointFinder() {
     delete[] this->_points;
 }
 
-void PointFinder::insert(struct Point* point, int index) {
+void PointFinder::insert(const struct Point* point, int index) {
     this->_points[index] = point;
 }
 
-struct Point* PointFinder::getPoint(int index) {
+const struct Point* PointFinder::getPoint(int index) {
     return this->_points[index];
 }
 
@@ -30,7 +30,7 @@ void PointFinder::xSort() {
     pointMergeSort(this->_points, this->_size, pointLessThanX);
 }
 
-int32_t PointFinder::rectSearch(struct Rect* rect, int32_t count, struct Point* rankedPoints) {
+int32_t PointFinder::rectSearch(const struct Rect* rect, int32_t count, struct Point* rankedPoints) {
     int left = pointClosestGreaterIndex(this->_points, rect->lx, this->_size, xComponentLessThanValue);
     int right = pointClosestLesserIndex(this->_points, rect->hx, this->_size, valueLessThanComponentX);
     if (left == -1 || right == -1 || right < left) {
@@ -38,7 +38,7 @@ int32_t PointFinder::rectSearch(struct Rect* rect, int32_t count, struct Point* 
     }
     int newSize = 0;
     
-    struct Point** validPoints = new struct Point*[right - left + 1];
+    const struct Point** validPoints = new const struct Point*[right - left + 1];
     for (int i = 0; i < right - left + 1; i++) {
         if (this->_points[i]->y >= rect->ly && this->_points[i]->y <= rect->hy) {
             validPoints[newSize] = this->_points[i];
@@ -51,6 +51,8 @@ int32_t PointFinder::rectSearch(struct Rect* rect, int32_t count, struct Point* 
     for (int i = 0; i < newSize; i++) {
         rankedPoints[i] = *(validPoints[i]);
     }
+
+    delete[] validPoints;
 
     return newSize;
 }
@@ -135,7 +137,7 @@ int main(int argc, char *argv[]) {
         // printf("\n\n%d points found inside rect:\n", pointNumber);
         // printRect(rects[i]);
         // for (int j = 0; j < pointNumber; j++) {
-        //     printPoint(rankedPoints[j]);
+        //     printPoint(&rankedPoints[j]);
         // }
     }
     printf("rect searching time: %ld\n", time(NULL) - start);

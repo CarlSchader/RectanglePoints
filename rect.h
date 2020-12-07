@@ -17,6 +17,6 @@ struct Rect
 
 #pragma pack(pop)
 
-bool pointInRect(struct Point* point, struct Rect* rect);
+bool pointInRect(const struct Point* point, const struct Rect* rect);
 
 #endif
