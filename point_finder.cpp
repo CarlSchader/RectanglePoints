@@ -1,5 +1,5 @@
 /* For compiling a dll on Visual C++ */
-#ifdef __WIN64 
+#ifdef __WIN32 
 #include "pch.h"
 #endif
 
