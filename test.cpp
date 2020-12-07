@@ -42,15 +42,16 @@ void printRect(struct Rect* rect) {
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
-        printf("Incorrect number of command line args. (3 required)\n");
+        printf("Incorrect number of command line args. (3 required) [POINT_COUNT] [RECT_COUNT] [RANKED_COUNT] \n");
         return 1;
     }
     const int POINT_COUNT = atoi(argv[1]);
-    const int RANKED_COUNT = atoi(argv[2]);
-    const int RECTANGLE_COUNT = atoi(argv[3]);
+    const int RECTANGLE_COUNT = atoi(argv[2]);
+    const int RANKED_COUNT = atoi(argv[3]);
 
     srand(time(NULL));
 
+    printf("%d Testing create\n", 0);
     struct Point* points = new struct Point[POINT_COUNT];
     for (int i = 0; i < POINT_COUNT; i++) {
         points[i] = *randomPoint(i);
@@ -58,12 +59,13 @@ int main(int argc, char *argv[]) {
     struct SearchContext* sc = create(&points[0], &points[POINT_COUNT]);
     delete[] points;
 
+
+    printf("%d Testing search\n", 1);
     struct Rect* rects = new struct Rect[RECTANGLE_COUNT];
     for (int i = 0; i < RECTANGLE_COUNT; i++) {
         rects[i] = *randomRect();
     }
 
-    // printf("%d\n", 0);
     struct Point* out_points = new struct Point[RANKED_COUNT];
     for (int i = 0; i < RECTANGLE_COUNT; i++) {
         search(sc, rects[i], RANKED_COUNT, out_points);

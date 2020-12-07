@@ -7,4 +7,4 @@ point_search.h   : Header file containing the precise problem definition and des
 point_search.exe : The testing framework that can load one or more DLLs, evaluate their performance and compare their results.
 reference.dll    : Reference solution that is used to test other solutions for correctness.
 
-
+For compilation on Unix based systems just use $ make
