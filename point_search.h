@@ -9,8 +9,17 @@ implements this interface. */
 #ifndef POINT_SEARCH_H
 #define POINT_SEARCH_H
 
-#define EXPORT // add __declspec(dllexport) if on windows
+#if defined(__GNUC__) || defined(__GNUG__)
+#define EXPORT
 #define __stdcall
+#endif
+#if defined(__MSVS__)
+#if defined(__cplusplus)
+#define EXPORT extern "C" __declspec(dllexport)
+#else
+#define EXPORT __declspec(dllexport)
+#endif
+#endif
 
 /* This standard header defines the sized types used. */
 #include <stdint.h>
@@ -62,16 +71,16 @@ can hold "count" number of Points. */
 
 //
 
-extern "C" EXPORT SearchContext* __stdcall create(const Point* points_begin, const Point* points_end);
+EXPORT struct SearchContext* __stdcall create(const struct Point* points_begin, const struct Point* points_end);
 
-extern "C" EXPORT int32_t __stdcall search(SearchContext* sc, const Rect rect, const int32_t count, Point* out_points);
+EXPORT int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const int32_t count, struct Point* out_points);
 
-extern "C" EXPORT SearchContext* __stdcall destroy(SearchContext* sc);
+EXPORT struct SearchContext* __stdcall destroy(struct SearchContext* sc);
 
-void print_point(Point point);
+void print_point(struct Point point);
 
-void print_points(Point* points, int n);
+void print_points(struct Point* points, int n);
 
-Point make_point(int id, int rank, float x, float y);
+struct Point make_point(int id, int rank, float x, float y);
 
 #endif
