@@ -1,3 +1,6 @@
+/* Author: Carl Schader
+This main function has small unit tests for the algorithms.
+Compile using gcc or g++ and run using the compiled executable. */
 #if defined(__MSVS__)
 #include "pch.h"
 #endif

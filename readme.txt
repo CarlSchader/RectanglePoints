@@ -1,7 +1,7 @@
 Author: Carl Schader
 Date: 12/9/2020
 
-This is my solution to the Churchill Navigation Programming challange.
+This is my solution to the Churchill Navigation Programming Challange.
 
 Compilation: (see Makefile for compilation options)
 Compile using gcc or g++

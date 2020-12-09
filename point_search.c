@@ -1,3 +1,5 @@
+/* Author: Carl Schader
+Function definitions for the three functions the DLL must export. */
 #if defined(__MSVS__)
 #include "pch.h"
 #endif

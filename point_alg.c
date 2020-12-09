@@ -1,3 +1,6 @@
+/* Author: Carl Schader
+Function definitions for certain algorithms associated with the Point struct. */
+
 #if defined(__MSVS__)
 #include "pch.h"
 #endif
