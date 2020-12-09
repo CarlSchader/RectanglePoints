@@ -1,2 +1,5 @@
-test: point_finder.cpp point.cpp rect.cpp point_search.cpp test.cpp
-	g++ point_finder.cpp point.cpp rect.cpp point_search.cpp test.cpp -o test
+test: *.c
+	g++ *.c -o test
+
+test_debug: *c
+	g++ *.c -o test_debug -g
