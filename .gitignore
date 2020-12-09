@@ -1,2 +1,5 @@
-.test
-.test_debug
+*.exe
+*.out
+*.o
+*.a
+*.dll

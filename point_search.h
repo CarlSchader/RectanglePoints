@@ -9,11 +9,11 @@ implements this interface. */
 #ifndef POINT_SEARCH_H
 #define POINT_SEARCH_H
 
-#if defined(__GNUC__) || defined(__GNUG__)
+#if defined(__unix__)
 #define EXPORT
 #define __stdcall
 #endif
-#if defined(__MSVS__)
+#if defined(_WIN32)
 #if defined(__cplusplus)
 #define EXPORT extern "C" __declspec(dllexport)
 #else

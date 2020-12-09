@@ -1,0 +1,21 @@
+--- Churchill Navigation Point Search Challenge ---
+Point count  : 10000000
+Query count  : 1000
+Result count : 20
+Random seed  : 8787438-2F01A68-8787438-12235CBE-23B09BE8
+
+Loading algorithms:
+Loading solution.dll... Success.
+1 algorithms loaded.
+
+Preparing 10000000 random points...done (564.8310ms).
+Preparing 1000 random queries...done (0.0340ms).
+
+Testing algorithm #0 (solution.dll):
+Robustness check...done.
+Loading points...done (1831.8840ms).
+Making queries...done (19655.7710ms, avg 19.6558ms/query).
+Release points...done (memory used: 125MB).
+
+Comparing the results of algorithms: There's nothing to compare to, load more DLLs!
+Cleaning up resources...done.
