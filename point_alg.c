@@ -21,15 +21,18 @@ void point_merge_sort(struct Point* points, int size, pointLessThanOp less_than)
 
     while (arraySize < size) {
         point_merge(points, buffer, left, middle, right, less_than);
-        if (right == size - 1) {
+        
+        if (right >= size - 1) {
             arraySize = arraySize * 2;
             left = 0;
+            middle = left + arraySize - 1;
+            right = middle + arraySize;
         }
         else {
             left = right + 1;
+            middle = left + arraySize - 1;
+            right = min(middle + arraySize, size - 1);
         }
-        middle = left + arraySize - 1;
-        right = min(middle + arraySize, size - 1);
     }
     free(buffer);
 }
@@ -162,7 +165,7 @@ int point_closest_lesser_index(struct Point* points, float searchValue, int size
 }
 
 /* Puts the smallest k points by rank in the first k indexes. */
-void point_k_snallest(struct Point* points, int k, int left, int right) {
+void point_k_smallest(struct Point* points, int k, int left, int right) {
     while (k > 0 && k < right - left + 1) {
         int partition_index = point_partition(points, left, right);
         if (partition_index == k || partition_index == k + 1) {

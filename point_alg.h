@@ -19,7 +19,7 @@ int point_closest_greater_index(struct Point* points, float searchValue, int siz
 
 int point_closest_lesser_index(struct Point* points, float searchValue, int size, valueLessThanComponent less_than);
 
-void point_k_snallest(struct Point* points, int k, int left, int right);
+void point_k_smallest(struct Point* points, int k, int left, int right);
 
 void point_quicksort(struct Point* points, int left, int right);
 

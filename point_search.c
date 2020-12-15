@@ -64,16 +64,6 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
     if (left == -1 || right == -1 || right < left) {
         return 0;
     }
-    // printf("value: %f, found: %f\n", rect.hx, (sc->points[right]).x);
-
-    // Point** rectangle_points = (Point**)malloc((right - left + 1) * sizeof(Point*));
-    // int found_size = 0;
-    // for (int i = left; i < right + 1; i++) {
-    //     if (sc->points[i].y >= rect.ly && sc->points[i].y <= rect.hy) {
-    //         rectangle_points[found_size] = &(sc->points[i]);
-    //         found_size++;
-    //     }
-    // }
 
     struct Point* rectangle_points = (struct Point*)malloc((right - left + 1) * sizeof(struct Point));
     int found_size = 0;
@@ -84,16 +74,11 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         }
     }
 
-    point_k_snallest(rectangle_points, (int)count, 0, found_size - 1);
-
     int return_size = min(count, found_size);
 
-    // point_quicksort(&rectangle_points[0], 0, return_size - 1);
-    point_merge_sort(rectangle_points, return_size, point_less_than_rank);
+    point_k_smallest(rectangle_points, (int)return_size, 0, found_size - 1);
 
-    // for (int i = 0; i < return_size; i++) {
-    //     out_points[i] = *(rectangle_points[i]);
-    // }
+    point_merge_sort(rectangle_points, return_size, point_less_than_rank);
 
     for (int i = 0; i < return_size; i++) {
         out_points[i] = rectangle_points[i];
