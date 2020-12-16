@@ -25,6 +25,14 @@ void point_quicksort(struct Point* points, int left, int right);
 
 int point_partition(struct Point* points, int left, int right);
 
+void point_radix_rank(struct Point* points, int size);
+
+void count_sort_128(struct Point* points, int size);
+
+void count_sort_stack(struct Point* points, int left, int right);
+
+void count_sort_heap(struct Point* points, int left, int right);
+
 bool point_less_than_x(const struct Point* p1, const struct Point* p2);
 
 bool point_less_than_y(const struct Point* p1, const struct Point* p2);

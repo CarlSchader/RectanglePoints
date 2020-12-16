@@ -209,6 +209,97 @@ int point_partition(struct Point* points, int left, int right) {
     return i;
 }
 
+void count_sort_heap(struct Point* points, int left, int right) {
+    struct Point* buffer = (struct Point*)malloc((right - left + 1) * sizeof(struct Point));
+    int i = 0;
+    int counts[128] = {0};
+
+    for (i = left; i < right + 1; i++) {
+        // printf("%d %d\n", 1, i);
+        counts[points[i].rank]++;
+    }
+    for (i = 1; i < 128; i++) {
+        // printf("%d %d\n", 2, i);
+        counts[i] += counts[i - 1];
+    }
+    for (i = right; i >= left; i--) {
+        // printf("%d %d\n", 3, i);
+        buffer[counts[points[i].rank] - 1] = points[i];
+        counts[points[i].rank]--;
+    }
+    for (i = 0; i < right - left + 1; i++) {
+        // printf("%d %d\n", 4, i);
+        points[i + left] = buffer[i];
+    }
+    free(buffer);
+}
+
+void count_sort_stack(struct Point* points, int left, int right) {
+    struct Point buffer[right - left + 1];
+    int i = 0;
+    int counts[128] = {0};
+
+    for (i = left; i < right + 1; i++) {
+        counts[points[i].rank]++;
+    }
+    for (i = 1; i < 128; i++) {
+        counts[i] += counts[i - 1];
+    }
+    for (i = right; i >= left; i--) {
+        buffer[counts[points[i].rank] - 1] = points[i];
+        counts[points[i].rank]--;
+    }
+    for (i = left; i < right + 1; i++) {
+        points[i] = buffer[i];
+    }
+}
+
+void count_sort_128(struct Point* points, int size) {
+    struct Point buffer[size];
+    int i = 0;
+    int counts[128] = {0};
+
+    for (i = 0; i < size; i++) {
+        counts[points[i].rank]++;
+    }
+    for (i = 1; i < 128; i++) {
+        counts[i] += counts[i - 1];
+    }
+    for (i = size - 1; i >=0; i--) {
+        buffer[counts[points[i].rank] - 1] = points[i];
+        counts[points[i].rank]--;
+    }
+    for (i = 0; i < size; i++) {
+        points[i] = buffer[i];
+    }
+}
+
+void count_sort_rank(struct Point* points, int size, int exponent) {
+    struct Point buffer[size];
+    int i = 0;
+    int counts[10] = {0};
+
+    for (i = 0; i < size; i++) {
+        counts[(points[i].rank / exponent) % 10]++;
+    }
+    for (i = 1; i < 10; i++) {
+        counts[i] += counts[i - 1];
+    }
+    for (i = size - 1; i >= 0; i--) {
+        buffer[counts[(points[i].rank / exponent) % 10] - 1] = points[i];
+        counts[(points[i].rank / exponent) % 10]--;
+    }
+    for (i = 0; i < size; i++) {
+        points[i] = buffer[i];
+    }
+}
+
+void point_radix_rank(struct Point* points, int size) {
+    for (int exponent = 1; 127 / exponent > 0; exponent *= 10) {
+        count_sort_rank(points, size, exponent);
+    }
+}
+
 bool point_less_than_x(const struct Point* p1, const struct Point* p2) {
     return p1->x < p2->x;
 }
