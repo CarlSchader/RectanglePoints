@@ -110,7 +110,6 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
             out_points[i] = rectangle_points[i];
         }
         free(rectangle_points);
-        
         return count;
     }
     else {
