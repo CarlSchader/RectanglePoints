@@ -31,7 +31,7 @@ struct Point make_point(int id, int rank, float x, float y) {
 }
 
 int rankcompare(const void* p1, const void* p2) {
-    return ((struct Point*)p1)->rank - ((struct Point*)p2)->rank;
+    return (*((struct Point*)p1)).rank - (*((struct Point*)p2)).rank;
 }
 
 struct SearchContext* __stdcall create(const struct Point* points_begin, const struct Point* points_end) {
