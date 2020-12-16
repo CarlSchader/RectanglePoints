@@ -32,6 +32,11 @@ struct Rect random_rect(float coord_max, float rect_max_width) {
     return rect;
 }
 
+// bool containsDuplicates(struct Point* points) {
+//     int size = size
+//     for(int i = 0; i )
+// }
+
 void test_merge_sort(struct Point* points, int size, int n) {
     printf("\nMerge sort test::\n");
     printf("Before merge\n");
@@ -133,7 +138,7 @@ int main(int argc, char* argv[]) {
     }
     printf("Time: %ld\n\n", time(NULL) - start);
 
-    // print_search_result(rects[RECT_COUNT - 1], count, out_points);
+    print_search_result(rects[RECT_COUNT - 1], count, out_points);
 
     printf("Testing destroy:\n");
     start = time(NULL);

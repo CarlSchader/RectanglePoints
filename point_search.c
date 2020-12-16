@@ -30,6 +30,10 @@ struct Point make_point(int id, int rank, float x, float y) {
     return p;
 }
 
+int rankcompare(const void* p1, const void* p2) {
+    return ((struct Point*)p1)->rank - ((struct Point*)p2)->rank;
+}
+
 struct SearchContext* __stdcall create(const struct Point* points_begin, const struct Point* points_end) {
     struct SearchContext* sc = (struct SearchContext*)malloc(sizeof(struct SearchContext));
 
@@ -76,53 +80,46 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
 
     // int return_size = min(count, found_size);
 
-    // if (count < found_size) {
-    //     point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
-    //     printf("After k smallest\n");
-    //     for (int i = 0; i < count; i++) {
-    //         print_point(rectangle_points[i]);
-    //     }
-    //     point_merge_sort(rectangle_points, count, point_less_than_rank);
-    //     printf("After merge\n");
-    //     for (int i = 0; i < count; i++) {
-    //         print_point(rectangle_points[i]);
-    //     }
-    //     for (int i = 0; i < count; i++) {
-    //         out_points[i] = rectangle_points[i];
-    //     }
-    //     free(rectangle_points);
+    if (count < found_size) {
+        point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
+        // printf("After k smallest\n");
+        // for (int i = 0; i < count; i++) {
+        //     print_point(rectangle_points[i]);
+        // }
+        qsort(rectangle_points, count, sizeof(struct Point), rankcompare);
+        // point_merge_sort(rectangle_points, count, point_less_than_rank);
+        // printf("After merge\n");
+        // for (int i = 0; i < count; i++) {
+        //     print_point(rectangle_points[i]);
+        // }
+        for (int i = 0; i < count; i++) {
+            out_points[i] = rectangle_points[i];
+        }
+        free(rectangle_points);
         
-    //     return count;
-    // }
-    // else {
-    //     point_merge_sort(rectangle_points, found_size, point_less_than_rank);
-    //     for (int i = 0; i < found_size; i++) {
-    //         out_points[i] = rectangle_points[i];
-    //     }
-    //     free(rectangle_points);
-    //     return found_size;
-    // }
-
-    point_merge_sort(rectangle_points, found_size, point_less_than_rank);
-    for (int i = 0; i < min(found_size, count); i++) {
-        out_points[i] = rectangle_points[i];
+        return count;
     }
-    printf("After merge\n");
-    for (int i = 0; i < min(found_size, count); i++) {
-        print_point(rectangle_points[i]);
+    else {
+        qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
+        // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
+        for (int i = 0; i < found_size; i++) {
+            out_points[i] = rectangle_points[i];
+        }
+        free(rectangle_points);
+        return found_size;
     }
-    free(rectangle_points);
-    return min(found_size, count);
 
-    // printf("After k smallest\n");
-    // for (int i = 0; i < return_size; i++) {
-    //     print_point(rectangle_points[i]);
+    // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
+    // for (int i = 0; i < min(found_size, count); i++) {
+    //     out_points[i] = rectangle_points[i];
     // }
-
     // printf("After merge\n");
     // for (int i = 0; i < min(found_size, count); i++) {
     //     print_point(rectangle_points[i]);
     // }
+    // free(rectangle_points);
+    // return min(found_size, count);
+
 
     
 
