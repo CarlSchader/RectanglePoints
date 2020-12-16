@@ -50,6 +50,7 @@ struct Rect
 struct SearchContext {
 	struct Point* points;
 	int size;
+	int max_rank;
 };
 
 /* Load the provided points into an internal data structure. The pointers follow the STL iterator convention, where

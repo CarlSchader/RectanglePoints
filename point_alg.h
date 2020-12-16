@@ -25,7 +25,9 @@ void point_quicksort(struct Point* points, int left, int right);
 
 int point_partition(struct Point* points, int left, int right);
 
-void point_radix_rank(struct Point* points, int size);
+void point_radix_rank_heap(struct Point* points, int size, int max);
+
+void point_radix_rank_stack(struct Point* points, int size, int max);
 
 void count_sort_128(struct Point* points, int size);
 

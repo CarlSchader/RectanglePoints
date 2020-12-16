@@ -274,7 +274,28 @@ void count_sort_128(struct Point* points, int size) {
     }
 }
 
-void count_sort_rank(struct Point* points, int size, int exponent) {
+void count_sort_rank_heap(struct Point* points, int size, int exponent) {
+    struct Point* buffer = (struct Point*) malloc(size * sizeof(struct Point));
+    int i = 0;
+    int counts[10] = {0};
+
+    for (i = 0; i < size; i++) {
+        counts[(points[i].rank / exponent) % 10]++;
+    }
+    for (i = 1; i < 10; i++) {
+        counts[i] += counts[i - 1];
+    }
+    for (i = size - 1; i >= 0; i--) {
+        buffer[counts[(points[i].rank / exponent) % 10] - 1] = points[i];
+        counts[(points[i].rank / exponent) % 10]--;
+    }
+    for (i = 0; i < size; i++) {
+        points[i] = buffer[i];
+    }
+    free(buffer);
+}
+
+void count_sort_rank_stack(struct Point* points, int size, int exponent) {
     struct Point buffer[size];
     int i = 0;
     int counts[10] = {0};
@@ -294,9 +315,15 @@ void count_sort_rank(struct Point* points, int size, int exponent) {
     }
 }
 
-void point_radix_rank(struct Point* points, int size) {
-    for (int exponent = 1; 127 / exponent > 0; exponent *= 10) {
-        count_sort_rank(points, size, exponent);
+void point_radix_rank_heap(struct Point* points, int size, int max) {
+    for (int exponent = 1; max / exponent > 0; exponent *= 10) {
+        count_sort_rank_heap(points, size, exponent);
+    }
+}
+
+void point_radix_rank_stack(struct Point* points, int size, int max) {
+    for (int exponent = 1; max / exponent > 0; exponent *= 10) {
+        count_sort_rank_stack(points, size, exponent);
     }
 }
 
