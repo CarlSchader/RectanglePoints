@@ -19,18 +19,20 @@ void point_merge_sort(struct Point* points, int size, pointLessThanOp less_than)
     int right = 1;
     struct Point* buffer = (struct Point*)malloc(size * sizeof(struct Point));
 
-    while (arraySize < size) {
+    printf("\n");
+    while (arraySize <= size) {
+        printf("%d %d %d %d %d\n", left, middle, right, size, arraySize);
         point_merge(points, buffer, left, middle, right, less_than);
         
         if (right >= size - 1) {
             arraySize = arraySize * 2;
             left = 0;
-            middle = left + arraySize - 1;
-            right = middle + arraySize;
+            middle = min(left + arraySize - 1, size - 1);
+            right = min(middle + arraySize, size - 1);
         }
         else {
-            left = right + 1;
-            middle = left + arraySize - 1;
+            left = min(right + 1, size - 1);
+            middle = min(left + arraySize - 1, size - 1);
             right = min(middle + arraySize, size - 1);
         }
     }

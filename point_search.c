@@ -84,6 +84,11 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         out_points[i] = rectangle_points[i];
     }
 
+    for (int i = 0; i < return_size; i++) {
+        print_point(out_points[i]);
+    }
+    printf("rect: x %.2f x %.2f y %.2f y %.2f\n", rect.lx, rect.hx, rect.ly, rect.hy);
+
     free(rectangle_points);
 
     return return_size;
