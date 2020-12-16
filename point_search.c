@@ -81,13 +81,13 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
     // int return_size = min(count, found_size);
 
     if (count < found_size) {
-        // point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
+        point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
         // printf("After k smallest\n");
         // for (int i = 0; i < count; i++) {
         //     print_point(rectangle_points[i]);
         // }
-        qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
-        // point_merge_sort(rectangle_points, count, point_less_than_rank);
+        // qsort(rectangle_points, count, sizeof(struct Point), rankcompare);
+        point_merge_sort(rectangle_points, count + 1, point_less_than_rank);
         // printf("After merge\n");
         // for (int i = 0; i < count; i++) {
         //     print_point(rectangle_points[i]);
@@ -100,8 +100,8 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         return count;
     }
     else {
-        qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
-        // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
+        // qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
+        point_merge_sort(rectangle_points, found_size + 1, point_less_than_rank);
         for (int i = 0; i < found_size; i++) {
             out_points[i] = rectangle_points[i];
         }
