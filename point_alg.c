@@ -21,7 +21,6 @@ void point_merge_sort(struct Point* points, int size, pointLessThanOp less_than)
 
     printf("\n");
     while (arraySize <= size) {
-        printf("%d %d %d %d %d\n", left, middle, right, size, arraySize);
         point_merge(points, buffer, left, middle, right, less_than);
         
         if (right >= size - 1) {

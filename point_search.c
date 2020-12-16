@@ -77,17 +77,25 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
     int return_size = min(count, found_size);
 
     point_k_smallest(rectangle_points, (int)return_size, 0, found_size - 1);
+    printf("After k smallest\n");
+    for (int i = 0; i < return_size; i++) {
+        print_point(rectangle_points[i]);
+    }
 
     point_merge_sort(rectangle_points, return_size, point_less_than_rank);
+    printf("After merge\n");
+    for (int i = 0; i < return_size; i++) {
+        print_point(rectangle_points[i]);
+    }
 
     for (int i = 0; i < return_size; i++) {
         out_points[i] = rectangle_points[i];
     }
 
-    for (int i = 0; i < return_size; i++) {
-        print_point(out_points[i]);
-    }
-    printf("rect: x %.2f x %.2f y %.2f y %.2f\n", rect.lx, rect.hx, rect.ly, rect.hy);
+    // for (int i = 0; i < return_size; i++) {
+    //     print_point(out_points[i]);
+    // }
+    // printf("rect: x %.2f x %.2f y %.2f y %.2f\n", rect.lx, rect.hx, rect.ly, rect.hy);
 
     free(rectangle_points);
 
