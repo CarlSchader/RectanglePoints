@@ -2,33 +2,33 @@
 Point count  : 1000
 Query count  : 1
 Result count : 20
-Random seed  : 2EBE828F-2436ECDF-2EBE828F-34E5AA09-5766D5F
+Random seed  : 1B60C0AF-11E8AEFF-1B60C0AF-13BE829-30A82F7F
 
 Loading algorithms:
 Loading reference.dll... Success.
 Loading solution.dll... Success.
 2 algorithms loaded.
 
-Preparing 1000 random points...done (0.0470ms).
+Preparing 1000 random points...done (0.0480ms).
 Preparing 1 random queries...done (0.0000ms).
 
 Testing algorithm #0 (reference.dll):
 Robustness check...done.
-Loading points...done (0.0580ms).
-Making queries...done (0.0000ms, avg 0.0000ms/query).
+Loading points...done (0.0620ms).
+Making queries...done (0.0050ms, avg 0.0050ms/query).
 Release points...done (memory used: 0MB).
 
 Testing algorithm #1 (solution.dll):
 Robustness check...done.
-Loading points...done (146.5130ms).
-Making queries...done (3.3220ms, avg 3.3220ms/query).
+Loading points...done (0.0980ms).
+Making queries...done (0.0920ms, avg 0.0920ms/query).
 Release points...done (memory used: 0MB).
 
 Comparing the results of algorithms: 
-#0 (reference.dll) and #1 (solution.dll): differ.
+#0 (reference.dll) and #1 (solution.dll): match.
 
 Scoreboard:
-#0: 0.0000ms reference.dll
-#1: 3.3220ms solution.dll
+#0: 0.0050ms reference.dll
+#1: 0.0920ms solution.dll
 
 Cleaning up resources...done.
