@@ -48,7 +48,8 @@ struct Rect
 
 /* Declaration of the struct that is used as the context for the calls. */
 struct SearchContext {
-	struct Point* points;
+	struct Point* pointsx;
+	struct Point* pointsy;
 	int size;
 };
 

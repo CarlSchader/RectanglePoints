@@ -32,49 +32,6 @@ struct Rect random_rect(float coord_max, float rect_max_width) {
     return rect;
 }
 
-// bool containsDuplicates(struct Point* points) {
-//     int size = size
-//     for(int i = 0; i )
-// }
-
-void test_merge_sort(struct Point* points, int size, int n) {
-    printf("\nMerge sort test::\n");
-    printf("Before merge\n");
-    print_points(points, n);
-    time_t start = time(NULL);
-    point_merge_sort(points, size, point_less_than_x);
-    printf("After merge\n");
-    print_points(points, n);
-    printf("Total time: %ld\n", time(NULL) - start);
-}
-
-void test_merge(struct Point* points, int left, int middle, int right) {
-    printf("Merge test::\n");
-    struct Point* buffer = (struct Point*)malloc((right - middle + 1) * sizeof(struct Point));
-    point_merge(points, buffer, right, middle, left, point_less_than_x);
-    print_points(&points[left], right - left + 1);
-}
-
-void test_closest_greater_index(struct Point* points, int size, float value) {
-    printf("\nClosest greater index test::\n");
-    printf("Value: %f\n", value);
-    time_t start = time(NULL);
-    int index = point_closest_greater_index(points, value, size, x_less_than_value);
-    printf("Total time: %ld\n", time(NULL) - start);
-    printf("index: %d\n", index);
-    print_point(points[index]);
-}
-
-void test_closest_lesser_index(struct Point* points, int size, float value) {
-    printf("\nClosest lesser index test::\n");
-    printf("Value: %f\n", value);
-    time_t start = time(NULL);
-    int index = point_closest_lesser_index(points, value, size, value_less_than_x);
-    printf("Total time: %ld\n", time(NULL) - start);
-    printf("index: %d\n", index);
-    print_point(points[index]);
-}
-
 void print_search_result(struct Rect rect, int32_t count, struct Point* out_points) {
     printf("\nSearch results::\n");
     printf("Rect: x: [%.1f, %.1f] y: [%.1f, %.1f]\n", rect.lx, rect.hx, rect.ly, rect.hy);

@@ -37,23 +37,26 @@ int rankcompare(const void* p1, const void* p2) {
 struct SearchContext* __stdcall create(const struct Point* points_begin, const struct Point* points_end) {
     struct SearchContext* sc = (struct SearchContext*)malloc(sizeof(struct SearchContext));
 
-    // int size = points_end - points_begin; // if random access iterator
+    int size = points_end - points_begin; // if random access iterator
     
-    int size = 0; // if not random access iterator
-    const struct Point* begin_copy = points_begin;
-    while (begin_copy != points_end) {
-        size++;
-        begin_copy++;
-    } //
+    // int size = 0; // if not random access iterator
+    // const struct Point* begin_copy = points_begin;
+    // while (begin_copy != points_end) {
+    //     size++;
+    //     begin_copy++;
+    // } //
     
     sc->size = size;
-    sc->points = (struct Point*)malloc(size * sizeof(struct Point));
+    sc->pointsx = (struct Point*)malloc(size * sizeof(struct Point));
+    sc->pointsy = (struct Point*)malloc(size * sizeof(struct Point));
     for (int i = 0; i < size; i++) {
-        sc->points[i] = *points_begin;
+        sc->pointsx[i] = *points_begin;
+        sc->pointsy[i] = *points_begin;
         points_begin++;
     }
 
-    point_merge_sort(sc->points, size, point_less_than_x);
+    point_merge_sort_x(sc->pointsx, size);
+    point_merge_sort_y(sc->pointsy, size);
 
     return sc;
 }
@@ -63,35 +66,46 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         return 0;
     }
 
-    int left = point_closest_greater_index(sc->points, rect.lx, sc->size, x_less_than_value);
-    int right = point_closest_lesser_index(sc->points, rect.hx, sc->size, value_less_than_x);
-    if (left == -1 || right == -1 || right < left) {
-        return 0;
-    }
+    // bool finding_y = rect.hx - rect.lx <= rect.hy - rect.ly;
+    int lefty = point_closest_greater_index_y(sc->pointsy, rect.ly, sc->size);
+    int righty = point_closest_lesser_index_y(sc->pointsy, rect.hy, sc->size);
+    int leftx = point_closest_greater_index_x(sc->pointsx, rect.lx, sc->size);
+    int rightx = point_closest_lesser_index_x(sc->pointsx, rect.hx, sc->size);
 
-    struct Point* rectangle_points = (struct Point*)malloc((right - left + 1) * sizeof(struct Point));
-    int found_size = 0;
-    for (int i = left; i < right + 1; i++) {
-        if (sc->points[i].y >= rect.ly && sc->points[i].y <= rect.hy) {
-            rectangle_points[found_size] = sc->points[i];
-            found_size++;
+    struct Point* rectangle_points;
+    int found_size;
+
+    if (rightx - leftx + 1 < righty - lefty + 1) {
+        if (leftx == -1 || rightx == -1 || rightx < leftx) {
+            return 0;
+        }
+
+        rectangle_points = (struct Point*)malloc((rightx - leftx + 1) * sizeof(struct Point));
+        found_size = 0;
+        for (int i = leftx; i < rightx + 1; i++) {
+            if (sc->pointsx[i].y >= rect.ly && sc->pointsx[i].y <= rect.hy) {
+                rectangle_points[found_size] = sc->pointsx[i];
+                found_size++;
+            }
+        }
+    }
+    else {
+        if (lefty == -1 || righty == -1 || righty < lefty) {
+            return 0;
+        }
+        rectangle_points = (struct Point*)malloc((righty - lefty + 1) * sizeof(struct Point));
+        found_size = 0;
+        for (int i = lefty; i < righty + 1; i++) {
+            if (sc->pointsy[i].x >= rect.lx && sc->pointsy[i].x <= rect.hx) {
+                rectangle_points[found_size] = sc->pointsy[i];
+                found_size++;
+            }
         }
     }
 
-    // int return_size = min(count, found_size);
-
     if (count < found_size) {
         point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
-        // printf("After k smallest\n");
-        // for (int i = 0; i < count; i++) {
-        //     print_point(rectangle_points[i]);
-        // }
-        // qsort(rectangle_points, count, sizeof(struct Point), rankcompare);
-        point_merge_sort(rectangle_points, count + 1, point_less_than_rank);
-        // printf("After merge\n");
-        // for (int i = 0; i < count; i++) {
-        //     print_point(rectangle_points[i]);
-        // }
+        point_merge_sort_rank(rectangle_points, count + 1);
         for (int i = 0; i < count; i++) {
             out_points[i] = rectangle_points[i];
         }
@@ -100,41 +114,18 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         return count;
     }
     else {
-        // qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
-        point_merge_sort(rectangle_points, found_size + 1, point_less_than_rank);
+        point_merge_sort_rank(rectangle_points, found_size + 1);
         for (int i = 0; i < found_size; i++) {
             out_points[i] = rectangle_points[i];
         }
         free(rectangle_points);
         return found_size;
     }
-
-    // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
-    // for (int i = 0; i < min(found_size, count); i++) {
-    //     out_points[i] = rectangle_points[i];
-    // }
-    // printf("After merge\n");
-    // for (int i = 0; i < min(found_size, count); i++) {
-    //     print_point(rectangle_points[i]);
-    // }
-    // free(rectangle_points);
-    // return min(found_size, count);
-
-
-    
-
-    // for (int i = 0; i < return_size; i++) {
-    //     print_point(out_points[i]);
-    // }
-    // printf("rect: x %.2f x %.2f y %.2f y %.2f\n", rect.lx, rect.hx, rect.ly, rect.hy);
-
-    // free(rectangle_points);
-
-    // return return_size;
 }
 
 struct SearchContext* __stdcall destroy(struct SearchContext* sc) {
-    free(sc->points);
+    free(sc->pointsx);
+    free(sc->pointsy);
     free(sc);
     return NULL;
 }

@@ -5,38 +5,22 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef bool (*pointLessThanOp)(const struct Point*, const struct Point*);
+void point_merge_sort_x(struct Point* points, int size);
 
-typedef bool (*componentLessThanValue)(const struct Point*, float);
+void point_merge_sort_y(struct Point* points, int size);
 
-typedef bool (*valueLessThanComponent)(float, const struct Point*);
+void point_merge_sort_rank(struct Point* points, int size);
 
-void point_merge_sort(struct Point* points, int size, pointLessThanOp less_than);
+int point_closest_greater_index_x(struct Point* points, float searchValue, int size);
 
-void point_merge(struct Point* points, struct Point* buffer, int left, int middle, int right, pointLessThanOp less_than);
+int point_closest_lesser_index_x(struct Point* points, float searchValue, int size);
 
-int point_closest_greater_index(struct Point* points, float searchValue, int size, componentLessThanValue less_than);
+int point_closest_greater_index_y(struct Point* points, float searchValue, int size);
 
-int point_closest_lesser_index(struct Point* points, float searchValue, int size, valueLessThanComponent less_than);
+int point_closest_lesser_index_y(struct Point* points, float searchValue, int size);
 
 void point_k_smallest(struct Point* points, int k, int left, int right);
 
-void point_quicksort(struct Point* points, int left, int right);
-
 int point_partition(struct Point* points, int left, int right);
-
-bool point_less_than_x(const struct Point* p1, const struct Point* p2);
-
-bool point_less_than_y(const struct Point* p1, const struct Point* p2);
-
-bool point_less_than_rank(const struct Point* p1, const struct Point* p2);
-
-bool x_less_than_value(const struct Point* point, float value);
-
-bool y_less_than_value(const struct Point* point, float value);
-
-bool value_less_than_x(float value, const struct Point* point);
-
-bool value_less_than_y(float value, const struct Point* point);
 
 #endif
