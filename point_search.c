@@ -72,66 +72,66 @@ int32_t __stdcall search(struct SearchContext* sc, const struct Rect rect, const
         return 0;
     }
 
-    // count_sort_heap(sc->points, left, right);
-    point_radix_rank_heap(sc->points, right - left + 1, sc->max_rank);
-    int i = left;
-    int found = 0;
-    while (i < right + 1 && found < count) {
-        // printf("i %d found %d left %d right %d\n", i, found, left, right);
-        if (sc->points[i].y >= rect.ly && sc->points[i].y <= rect.hy) {
-            out_points[found] = sc->points[i];
-            found++;
-        }
-        i++;
-    }
-    return found;
-
-    // struct Point* rectangle_points = (struct Point*)malloc((right - left + 1) * sizeof(struct Point));
-    // int found_size = 0;
-    // int max_rank = 0;
-    // for (int i = left; i < right + 1; i++) {
+    // // count_sort_heap(sc->points, left, right);
+    // point_radix_rank_heap(sc->points, right - left + 1, sc->max_rank);
+    // int i = left;
+    // int found = 0;
+    // while (i < right + 1 && found < count) {
+    //     // printf("i %d found %d left %d right %d\n", i, found, left, right);
     //     if (sc->points[i].y >= rect.ly && sc->points[i].y <= rect.hy) {
-    //         rectangle_points[found_size] = sc->points[i];
-    //         found_size++;
-    //         if (max_rank < sc->points[i].rank) max_rank = sc->points[i].rank;
+    //         out_points[found] = sc->points[i];
+    //         found++;
     //     }
+    //     i++;
     // }
+    // return found;
+
+    struct Point* rectangle_points = (struct Point*)malloc((right - left + 1) * sizeof(struct Point));
+    int found_size = 0;
+    int max_rank = 0;
+    for (int i = left; i < right + 1; i++) {
+        if (sc->points[i].y >= rect.ly && sc->points[i].y <= rect.hy) {
+            rectangle_points[found_size] = sc->points[i];
+            found_size++;
+            if (max_rank < sc->points[i].rank) max_rank = sc->points[i].rank;
+        }
+    }
 
 
-    // if (count < found_size) {
-    //     // point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
-    //     // printf("After k smallest\n");
-    //     // for (int i = 0; i < count; i++) {
-    //     //     print_point(rectangle_points[i]);
-    //     // }
-    //     // count_sort_stack(rectangle_points, 0, found_size - 1);
-    //     // count_sort_128(rectangle_points, count);
-    //     point_radix_rank_heap(rectangle_points, found_size, max_rank);
-    //     // qsort(rectangle_points, count, sizeof(struct Point), rankcompare);
-    //     // point_merge_sort(rectangle_points, count, point_less_than_rank);
-    //     // printf("After merge\n");
-    //     // for (int i = 0; i < count; i++) {
-    //     //     print_point(rectangle_points[i]);
-    //     // }
-    //     for (int i = 0; i < count; i++) {
-    //         out_points[i] = rectangle_points[i];
-    //     }
-    //     free(rectangle_points);
+    if (count < found_size) {
+        // point_k_smallest(rectangle_points, (int)count, 0, found_size - 1);
+        // printf("After k smallest\n");
+        // for (int i = 0; i < count; i++) {
+        //     print_point(rectangle_points[i]);
+        // }
+        // count_sort_stack(rectangle_points, 0, found_size - 1);
+        // count_sort_128(rectangle_points, count);
+        point_radix_rank_heap(rectangle_points, found_size, max_rank);
+        // qsort(rectangle_points, count, sizeof(struct Point), rankcompare);
+        // point_merge_sort(rectangle_points, count, point_less_than_rank);
+        // printf("After merge\n");
+        // for (int i = 0; i < count; i++) {
+        //     print_point(rectangle_points[i]);
+        // }
+        for (int i = 0; i < count; i++) {
+            out_points[i] = rectangle_points[i];
+        }
+        free(rectangle_points);
         
-    //     return count;
-    // }
-    // else {
-    //     // count_sort_stack(rectangle_points, 0, found_size - 1);
-    //     // count_sort_128(rectangle_points, found_size);
-    //     point_radix_rank_heap(rectangle_points, found_size, max_rank);
-    //     // qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
-    //     // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
-    //     for (int i = 0; i < found_size; i++) {
-    //         out_points[i] = rectangle_points[i];
-    //     }
-    //     free(rectangle_points);
-    //     return found_size;
-    // }
+        return count;
+    }
+    else {
+        // count_sort_stack(rectangle_points, 0, found_size - 1);
+        // count_sort_128(rectangle_points, found_size);
+        point_radix_rank_stack(rectangle_points, found_size, max_rank);
+        // qsort(rectangle_points, found_size, sizeof(struct Point), rankcompare);
+        // point_merge_sort(rectangle_points, found_size, point_less_than_rank);
+        for (int i = 0; i < found_size; i++) {
+            out_points[i] = rectangle_points[i];
+        }
+        free(rectangle_points);
+        return found_size;
+    }
 }
 
 struct SearchContext* __stdcall destroy(struct SearchContext* sc) {
